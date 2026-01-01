@@ -29,12 +29,12 @@ body {
 }
 
 /* Fundal inimioare */
-
+/* Fundal inimioare – doar z-index modificat */
 .hearts-container {
     position: fixed;
     inset: 0;
     overflow: hidden;
-    z-index: 2; /* înainte era 0 */
+    z-index: 0; /* a fost 2, acum este sub tot ce e scrisoarea */
     pointer-events: none;
 }
 
@@ -127,9 +127,11 @@ body {
 }
 
 .intro-screen,
+/* Stacking context pentru scrisoare */
 .letter-screen {
     position: relative;
     z-index: 4;
+    isolation: isolate; /* asigură că tot ce e în interior e peste inimioare */
 }
 
 /* Buton */
@@ -201,9 +203,7 @@ body {
 /* Letter wrapper */
 
 .letter-wrapper {
-    width: 100%;
-    max-width: 520px;
-    perspective: 1400px;
+    z-index: 5;
 }
 
 .letter-envelope {
@@ -214,6 +214,7 @@ body {
     box-shadow: var(--shadow-soft);
     position: relative;
     overflow: visible;
+    z-index: 6;
 }
 
 /* Animație scrisoare care se deschide */
@@ -222,13 +223,7 @@ body {
     position: relative;
     background: #ffffff;
     padding: 1.6rem 1.4rem 1.8rem;
-    z-index: 5;
-
-    /* margini neregulate */
-    clip-path: polygon(
-        0% 1%, 5% 0%, 12% 1%, 25% 0%, 40% 1%, 55% 0%, 70% 1%, 85% 0%, 100% 1%,
-        99% 99%, 90% 100%, 70% 99%, 50% 100%, 30% 99%, 10% 100%, 0% 99%
-    );
+    z-index: 7;
 
     /* textura foarte subtilă de hârtie */
     background-image:
@@ -236,17 +231,26 @@ body {
         radial-gradient(circle at 20% 30%, rgba(0,0,0,0.02), transparent 40%);
     background-size: 100% 24px, 100% 100%;
 
+    /* margini rotunjite */
+    border-radius: 18px;
+
+    /* bordură elegantă */
+    border: 2px solid rgba(18, 3, 3, 0.699);
+    box-shadow:
+        0 4px 10px rgba(210, 94, 94, 0.854),
+        0 0 0 6px rgba(192, 223, 234, 0.692) inset;
+
     transform-origin: top center;
     transform: rotateX(88deg);
     opacity: 0;
 
     animation:
-        openLetter 1.2s cubic-bezier(0.21, 0.61, 0.35, 1) forwards 0.5s,
-        paperWobble 1.6s ease-out forwards 1.6s;
+        openLetter 1.2s cubic-bezier(0.21, 0.61, 0.35, 1) forwards 0.5s;
 
     max-height: 78vh;
     overflow-y: auto;
 }
+
 
 .letter-envelope {
     position: relative;
@@ -255,26 +259,6 @@ body {
     margin: auto;
     perspective: 1200px;
 }
-
-
-.paper-back {
-    position: absolute;
-    inset: 0;
-    background: #9cc4e3; /* alb rece, foarte ușor baby-blue */
-    z-index: 0;
-    border-radius: 18px;
-    clip-path: polygon(
-        0% 1%, 5% 0%, 12% 1%, 25% 0%, 40% 1%, 55% 0%, 70% 1%, 85% 0%, 100% 1%,
-        99% 99%, 90% 100%, 70% 99%, 50% 100%, 30% 99%, 10% 100%, 0% 99%
-    );
-    /* umbră mult mai elegantă */
-    box-shadow:
-        0 10px 22px rgba(0, 40, 80, 0.12),
-        0 2px 6px rgba(0, 40, 80, 0.06);
-}
-
-
-
 
 @keyframes openLetter {
     0% {
@@ -365,20 +349,24 @@ body {
     }
 }
 
-@keyframes paperWobble {
-    0% { transform: rotateX(0deg) rotateZ(0deg); }
-    40% { transform: rotateX(0deg) rotateZ(0.3deg); }
-    70% { transform: rotateX(0deg) rotateZ(-0.2deg); }
-    100% { transform: rotateX(0deg) rotateZ(0deg); }
+.letter-paper {
+    animation: openLetterElegant 1.2s ease-out forwards 0.5s;
 }
 
-@keyframes openLetter {
+@keyframes openLetterElegant {
     0% {
-        transform: rotateX(88deg);
+        transform: scale(0.95) rotateX(1deg); /* mică ridicare */
         opacity: 0;
     }
+    50% {
+        transform: scale(1.02) rotateX(0deg); /* un mic „bounce” subtil */
+        opacity: 0.8;
+    }
     100% {
-        transform: rotateX(0deg);
+        transform: scale(1) rotateX(0deg); /* poziție finală */
         opacity: 1;
     }
 }
+
+
+
