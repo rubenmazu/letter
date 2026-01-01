@@ -1,0 +1,384 @@
+/* Reset simplu */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --baby-blue: #cfe8ff;
+    --baby-blue-soft: #e3f1ff;
+    --soft-pink: #f7c6d9;
+    --soft-pink-deep: #f29bbd;
+    --text-main: #243042;
+    --text-soft: #4f5a6a;
+    --white: #ffffff;
+    --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.08);
+    --transition-base: 0.5s ease;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    background: var(--baby-blue);
+    color: var(--text-main);
+    overflow: hidden;
+}
+
+/* Fundal inimioare */
+
+.hearts-container {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 2; /* înainte era 0 */
+    pointer-events: none;
+}
+
+
+.heart {
+    position: absolute;
+    bottom: -20px;
+    background: #ff8fb8;
+    transform: rotate(45deg);
+    opacity: 0.9;
+    animation: floatUp linear infinite;
+    border-radius: 4px;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    background: #ff8fb8;
+    border-radius: 50%;
+}
+
+.heart::before,
+.heart::after {
+    width: var(--heart-size);
+    height: var(--heart-size);
+}
+
+.heart::before {
+    top: calc(var(--heart-size) * -0.5);
+    left: 0;
+}
+
+.heart::after {
+    left: calc(var(--heart-size) * -0.5);
+    top: 0;
+}
+
+
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) rotate(45deg) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(-120vh) rotate(45deg) scale(1.1);
+        opacity: 0;
+    }
+}
+
+/* Intro screen */
+
+.intro-screen {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.intro-content {
+    max-width: 420px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.82);
+    padding: 2.2rem 1.8rem 2.4rem;
+    border-radius: 22px;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.intro-title {
+    font-family: "Dancing Script", "Playfair Display", serif;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.intro-subtitle {
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--text-soft);
+    margin-bottom: 1.8rem;
+}
+
+.intro-screen,
+.letter-screen {
+    position: relative;
+    z-index: 4;
+}
+
+/* Buton */
+
+.primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.8rem;
+    background: linear-gradient(135deg, var(--soft-pink), var(--soft-pink-deep));
+    color: var(--white);
+    border-radius: 999px;
+    border: none;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(242, 155, 189, 0.35);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.3s ease;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px rgba(242, 155, 189, 0.45);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 8px 18px rgba(242, 155, 189, 0.3);
+}
+
+/* Fade transitions */
+
+.fade-out {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Letter screen */
+
+.letter-screen {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    padding: 1.2rem 1.2rem 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top, var(--baby-blue-soft), var(--baby-blue));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.7s ease;
+}
+
+.letter-screen.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Letter wrapper */
+
+.letter-wrapper {
+    width: 100%;
+    max-width: 520px;
+    perspective: 1400px;
+}
+
+.letter-envelope {
+    width: 100%;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #fdfdfd, #f6f7fb);
+    padding: 0.14rem;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: visible;
+}
+
+/* Animație scrisoare care se deschide */
+
+.letter-paper {
+    position: relative;
+    background: #ffffff;
+    padding: 1.6rem 1.4rem 1.8rem;
+    z-index: 5;
+
+    /* margini neregulate */
+    clip-path: polygon(
+        0% 1%, 5% 0%, 12% 1%, 25% 0%, 40% 1%, 55% 0%, 70% 1%, 85% 0%, 100% 1%,
+        99% 99%, 90% 100%, 70% 99%, 50% 100%, 30% 99%, 10% 100%, 0% 99%
+    );
+
+    /* textura foarte subtilă de hârtie */
+    background-image:
+        linear-gradient(transparent 96%, rgba(0,0,0,0.03) 100%),
+        radial-gradient(circle at 20% 30%, rgba(0,0,0,0.02), transparent 40%);
+    background-size: 100% 24px, 100% 100%;
+
+    transform-origin: top center;
+    transform: rotateX(88deg);
+    opacity: 0;
+
+    animation:
+        openLetter 1.2s cubic-bezier(0.21, 0.61, 0.35, 1) forwards 0.5s,
+        paperWobble 1.6s ease-out forwards 1.6s;
+
+    max-height: 78vh;
+    overflow-y: auto;
+}
+
+.letter-envelope {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    margin: auto;
+    perspective: 1200px;
+}
+
+
+.paper-back {
+    position: absolute;
+    inset: 0;
+    background: #9cc4e3; /* alb rece, foarte ușor baby-blue */
+    z-index: 0;
+    border-radius: 18px;
+    clip-path: polygon(
+        0% 1%, 5% 0%, 12% 1%, 25% 0%, 40% 1%, 55% 0%, 70% 1%, 85% 0%, 100% 1%,
+        99% 99%, 90% 100%, 70% 99%, 50% 100%, 30% 99%, 10% 100%, 0% 99%
+    );
+    /* umbră mult mai elegantă */
+    box-shadow:
+        0 10px 22px rgba(0, 40, 80, 0.12),
+        0 2px 6px rgba(0, 40, 80, 0.06);
+}
+
+
+
+
+@keyframes openLetter {
+    0% {
+        transform: rotateX(88deg) translateY(-12px);
+        opacity: 0;
+    }
+    60% {
+        transform: rotateX(-12deg);
+        opacity: 1;
+    }
+    100% {
+        transform: rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+/* Scroll bar discret pe mobile */
+
+.letter-paper::-webkit-scrollbar {
+    width: 5px;
+}
+
+.letter-paper::-webkit-scrollbar-track {
+    background: #f3f5f9;
+    border-radius: 100px;
+}
+
+.letter-paper::-webkit-scrollbar-thumb {
+    background: var(--soft-pink);
+    border-radius: 100px;
+}
+
+/* Text scrisoare */
+
+.letter-header p {
+    font-family: "Dancing Script", "Playfair Display", serif;
+    font-size: 1.6rem;
+    margin-bottom: 1.1rem;
+    color: var(--text-main);
+}
+
+.letter-body p {
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--text-soft);
+    margin-bottom: 0.9rem;
+}
+
+.letter-body p:last-child {
+    margin-bottom: 1.2rem;
+}
+
+.letter-footer {
+    margin-top: 0.4rem;
+}
+
+.letter-footer p {
+    font-size: 0.98rem;
+    color: var(--text-soft);
+    line-height: 1.6;
+}
+
+.letter-signature {
+    font-family: "Dancing Script", "Playfair Display", serif;
+    font-size: 1.4rem;
+    margin-top: 0.4rem;
+    color: var(--text-main);
+}
+
+/* Responsivitate */
+
+@media (min-width: 600px) {
+    .intro-title {
+        font-size: 2.5rem;
+    }
+
+    .intro-content {
+        padding: 2.4rem 2.1rem 2.6rem;
+    }
+
+    .letter-paper {
+        padding: 1.6rem 1.6rem 1.9rem;
+        max-height: 80vh;
+    }
+
+    .letter-body p {
+        font-size: 1rem;
+    }
+}
+
+@keyframes paperWobble {
+    0% { transform: rotateX(0deg) rotateZ(0deg); }
+    40% { transform: rotateX(0deg) rotateZ(0.3deg); }
+    70% { transform: rotateX(0deg) rotateZ(-0.2deg); }
+    100% { transform: rotateX(0deg) rotateZ(0deg); }
+}
+
+@keyframes openLetter {
+    0% {
+        transform: rotateX(88deg);
+        opacity: 0;
+    }
+    100% {
+        transform: rotateX(0deg);
+        opacity: 1;
+    }
+}
